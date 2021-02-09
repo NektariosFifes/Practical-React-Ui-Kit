@@ -21,14 +21,21 @@
   "engines": {
     "node": "15.8.0"
   },
-  "description": "Practical,responsive,simple and fully documented react component library. Pull requests and contributions are always welcome.",
-  "dependencies": {
-
+  "repository": {
+    "url": "https://github.com/NektariosFifes/Practical-React-Ui-Kit.git"
   },
+  "description": "Practical,responsive,simple and fully documented react component library. Pull requests and contributions are always welcome.",
   "scripts": {
     "project-manager": "node ./scripts/ProjectManager.js"
   },
   "devDependencies": {
-    "webpack": "^5.21.1"
+    "@babel/preset-env": "^7.12.13",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "fs-extra": "^9.1.0",
+    "styled-jsx": "^3.4.2",
+    "webpack": "^5.21.1",
+    "webpack-cli": "^4.5.0"
   }
 }
