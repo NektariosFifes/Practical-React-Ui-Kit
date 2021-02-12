@@ -100,7 +100,7 @@ async function resolveFilesAndDirectories() {
     console.log(IndexDirectories_Clean)
 
 
-    return  config =  {
+    var  config =  {
         mode : 'none' ,
 
 
@@ -162,4 +162,32 @@ async function resolveFilesAndDirectories() {
             ] ,
         } ,
     }
+
+    return [
+        config,
+        {
+            ...config,
+
+            entry: {
+                index: path.join(componentsPath, 'index.ts'),
+            },
+        },
+        {
+            ...configs,
+
+            mode: 'production',
+
+            entry: {
+                'index.min': path.join(path.join(__dirname,"../src"), 'index.ts'),
+            },
+
+            output: {
+                filename: '[name].js',
+                path: path.resolve(__dirname, '../dist'),
+                library: 'GeistUI',
+                libraryTarget: 'umd',
+                globalObject: 'this',
+            },
+        },
+    ]
 }
