@@ -1,10 +1,12 @@
 {
-  "name": "practical-react-ui-kit",
-  "version": "1.0.0",
+  "name": "@NektariosFifes/practical-react-ui-kit",
+  "pkgRoot": "./",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "module": "esm/index.js",
+  "types": "dist/index.d.ts",
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/",
-    "tag": "in-development"
+    "registry": "https://npm.pkg.github.com/NektariosFifes"
   },
   "keywords": [
     "React",
@@ -26,23 +28,42 @@
   },
   "description": "Practical,responsive,simple and fully documented react component library. Pull requests and contributions are always welcome.",
   "scripts": {
-    "project-manager": "node ./scripts/ProjectManager.js"
+    "project-manager": "node ./scripts/ProjectManager.js",
+    "build:esm": "babel --config-file ./scripts/babel.config.js --extensions \".js,.ts,.tsx\" ./src/Library --out-dir ./esm --ignore \"**/__tests__/**/*,**/*.d.ts\"",
+    "build:webpack": "webpack --config scripts/webpack.config.js",
+    "build:types": "tsc -p ./scripts"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
+  "files": [
+    "/dist/**/*",
+    "/esm/**/*"
+  ],
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
+    "@babel/runtime": "^7.9.6",
+    "@mdx-js/loader": "^1.5.7",
     "@next/mdx": "^10.0.6",
     "@storybook/react": "^6.1.17",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.0.6",
     "fs-extra": "^9.1.0",
     "next": "^10.0.6",
+    "node-sass": "^5.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "sass-loader": "^11.0.1",
     "styled-jsx": "^3.4.2",
+    "typescript": "^3.8.3",
     "webpack": "^5.21.1",
     "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+
   }
 }
