@@ -1,66 +1,67 @@
-// @ts-ignore
-import React, {ReactElement, ReactNode, useMemo} from "react";
-import  {ComponentWithDefaults} from "../UtilityModules"
-import  "../styles/TextStyles.scss"
-interface Component_Props {
-    preset_Heading_Title?:boolean
-    preset_Heading_Paragraph_Title?:boolean
-    preset_Heading_BelowTitle_Description?:boolean
-    size?: number | string
-    a?: boolean
-    br?: boolean
-    code?: boolean
-    cite?: boolean
-    del?: boolean
-    em?: boolean
-    small?: boolean
-    classN?:string
+import React, { ReactElement, ReactNode, useMemo } from 'react';
+import { ComponentWithDefaults } from '../UtilityModules';
+import '../styles/TextStyles.scss';
+import { default as TextSubComponent1 } from './TextSubComp1';
+import { TextSubComp1PresetsTypes } from '../UtilityModules/Types/Properties_Types';
+
+interface ComponentProps {
+    presetHeadingTitle?: boolean;
+    presetHeadingParagraphTitle?: boolean;
+    presetHeadingBelowTitleDescription?: boolean;
+    size?: number | string;
+    a?: boolean;
+    br?: boolean;
+    code?: boolean;
+    cite?: boolean;
+    del?: boolean;
+    em?: boolean;
+    small?: boolean;
+    classN?: string;
 }
 //
-const Default_Properties =    {
-    preset_Heading_BelowTitle_Description:false,
-    preset_Heading_Paragraph_Title:false,
-    preset_Heading_Title:false,
+const DefaultProperties = {
+    size: 15,
+    presetHeadingBelowTitleDescription: false,
+    presetHeadingParagraphTitle: false,
+    presetHeadingTitle: false,
     a: false,
     br: false,
     code: false,
     cite: false,
     del: false,
-    em:false,
-    small:false,
+    em: false,
+    small: false,
+};
 
+type ElementTypes = ComponentProps;
+
+type BasicHtmlAttributes = Omit<React.HTMLAttributes<any>, keyof ComponentProps>;
+
+export type TextCompProps = typeof DefaultProperties & ComponentProps & BasicHtmlAttributes;
+
+type HtmlElementsList = { [key in keyof JSX.IntrinsicElements]?: boolean };
+
+type AvailableChildElementsList = Array<ComponentProps>;
+
+function GetComponentChildren(
+    CompNames: AvailableChildElementsList,
+    children: ReactNode | ReactElement,
+    size?: string | number,
+) {
+    if (!CompNames.length) return children;
+    const NextChildComp = CompNames.slice(1, CompNames.length);
+    return <div></div>;
 }
+export type PresetsArray = Array<TextSubComp1PresetsTypes>;
 
+type PropsArray = Array<keyof ComponentProps>;
 
-type ElementTypes = Component_Props
-
-type  BasicHtmlAttributes = Omit<React.HTMLAttributes<any>,keyof  Component_Props>
-
-export type TextCompProps = typeof Default_Properties & Component_Props & BasicHtmlAttributes
-
-type HtmlElementsList = { [key in keyof JSX.IntrinsicElements]?: boolean }
-
-type AvailableChildElementsList = Array<Component_Props>
-
- function GetComponentChildren (
-     CompNames:AvailableChildElementsList,
-     children:ReactNode | ReactElement,
-     size?:string|number
- )
- {
-    if(!CompNames.length) return children
-     const NextChildComp = CompNames.slice(1,CompNames.length)
-     return(
-         <div></div>
-     )
- }
-
-
-type PropsArray =  Array<keyof Component_Props>
-const TextComp : React.FC<React.PropsWithChildren<TextCompProps>> = ({
-        preset_Heading_BelowTitle_Description,
-        preset_Heading_Title,
-        preset_Heading_Paragraph_Title,
+function TextComp(props: React.PropsWithChildren<TextCompProps>) {
+    // @ts-ignore
+    const {
+        presetHeadingBelowTitleDescription,
+        presetHeadingTitle,
+        presetHeadingParagraphTitle,
         size,
         a,
         classN,
@@ -71,61 +72,62 @@ const TextComp : React.FC<React.PropsWithChildren<TextCompProps>> = ({
         em,
         small,
         children,
-    ...props
-    })=> {
-
-    const AvailableAppendableElements: ElementTypes = {
-        preset_Heading_BelowTitle_Description,
-        preset_Heading_Title,
-        preset_Heading_Paragraph_Title,
+    } = props;
+    const AvailableAppendablePresets: ElementTypes = {
+        presetHeadingBelowTitleDescription: presetHeadingBelowTitleDescription,
+        presetHeadingTitle: presetHeadingTitle,
+        presetHeadingParagraphTitle: presetHeadingParagraphTitle,
         size,
-
-    }
+    };
     const AvailableAppendableInlineElements: ElementTypes = {
-        a, br, code, cite, del, em, small
+        a,
+        br,
+        code,
+        cite,
+        del,
+        em,
+        small,
+    };
+
+    interface Test {
+        lo: number;
     }
-    // @ts-ignore
-    const AppendbleElements_Sanitized = Object.keys(AvailableAppendableElements)
-        .filter((element) => {
 
-            // @ts-ignore
-            return AvailableAppendableElements[element]
-            }
-        ) as PropsArray
+    const lo: Test = { lo: 5 };
 
+    const AppendblePresetsSanitized = Object.keys(AvailableAppendablePresets).filter((element) => {
+        const Index = element as keyof ElementTypes;
+        return AvailableAppendablePresets[Index];
+    }) as PresetsArray;
 
-    const AppendbleInlineElements_Sanitized = Object.keys(AvailableAppendableInlineElements)
-        .filter((element: any) => {
-              // @ts-ignore
-            return  AvailableAppendableInlineElements[element]
-            }
-        ) as PropsArray
+    const AppendbleInlineElementsSanitized = Object.keys(AvailableAppendableInlineElements).filter(
+        (element: string) => {
+            const Index = element as keyof ElementTypes;
+            return AvailableAppendableInlineElements[Index];
+        },
+    ) as PropsArray;
 
+    const CompName = useMemo(() => {
+        if (AppendblePresetsSanitized[0]) return AppendbleInlineElementsSanitized[0];
+        if (AppendbleInlineElementsSanitized[0]) return AppendbleInlineElementsSanitized[0];
+        return 'p' as keyof JSX.IntrinsicElements;
+    }, [AppendblePresetsSanitized, AppendbleInlineElementsSanitized]);
 
+    const AppendableChildrenElements = AppendbleInlineElementsSanitized.filter(
+        (elemname: keyof ComponentProps) => elemname != CompName,
+    );
 
-    const CompName =  useMemo(()=>{
-        if(AppendbleElements_Sanitized[0]) return AppendbleInlineElements_Sanitized[0]
-        if(AppendbleInlineElements_Sanitized[0])  return AppendbleInlineElements_Sanitized[0]
-        return 'p' as keyof JSX.IntrinsicElements
-        },[AppendbleElements_Sanitized,AppendbleInlineElements_Sanitized])
+    const childrenElem = useMemo(() => {
+        if (!AppendableChildrenElements.length) return children;
+    }, [AppendableChildrenElements, children, size]);
 
-    const AppendableChildrenElements = AppendbleInlineElements_Sanitized.filter(
-        (elemname: keyof Component_Props)=> elemname!=CompName
-    )
-
-    const childrenElem = useMemo(()=>{
-        if (!AppendableChildrenElements.length) return children
-    },[AppendableChildrenElements,children,size])
-
-    return(
-        <div className={'test'}>
-            test
-        </div>
-    )
-
+    return (
+        <TextSubComponent1 sizeFont={size} className={classN} preset={AppendblePresetsSanitized}>
+            {children}
+        </TextSubComponent1>
+    );
 }
 
-const MemoizedComponent  = React.memo(TextComp)
+const MemoizedComponent = React.memo(TextComp);
 
-export default ComponentWithDefaults(MemoizedComponent,Default_Properties)
-
+export default ComponentWithDefaults(MemoizedComponent, DefaultProperties);

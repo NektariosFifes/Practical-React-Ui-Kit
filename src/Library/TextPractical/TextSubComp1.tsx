@@ -1,51 +1,41 @@
-// @ts-ignore
-import React, {Children, useMemo} from 'react'
-import {TextSubComp1_PresetsTypes} from '../UtilityModules/Types/Properties_Types'
-
+import React, { ReactElement, ReactNode, Children, useMemo } from 'react';
+import { TextSubComp1PresetsTypes } from '../UtilityModules/Types/Properties_Types';
+import { ComponentWithDefaults } from '../UtilityModules';
+import { PresetsArray } from './TextComp';
 export interface SubComp1Props {
-
-    TextSubComp1_Name : JSX.IntrinsicElements,
-    preset:TextSubComp1_PresetsTypes
-    size?:string | number
-    className?: string
+    TextSubComp1Name: keyof JSX.IntrinsicElements;
+    preset: PresetsArray;
+    sizeFont?: string | number;
+    className?: string;
 }
 
+const TextSubComp1DefaultProps = {
+    TextSubComp1Name: 'div' as keyof JSX.IntrinsicElements,
+    preset: ['normal'] as PresetsArray,
+    size: 15,
+    className: `Default`,
+};
 
+type BasicHtmlAttributes = Omit<React.DetailsHTMLAttributes<any>, keyof SubComp1Props>;
 
-const SubComp1DefaultProps  = {
-    TextSubComp1_Name : 'div' as unknown as JSX.IntrinsicElements,
-    preset:'normal' as TextSubComp1_PresetsTypes,
-    size:15,
-    className: `Default`
+export type SubComp1PropsHtmlAttributes = SubComp1Props & typeof TextSubComp1DefaultProps & BasicHtmlAttributes;
+
+class TextSubComponent extends React.Component<React.PropsWithChildren<SubComp1PropsHtmlAttributes>> {
+    render() {
+        const { children, TextSubComp1Name, preset, size, className, ...props } = this.props;
+        const Name = TextSubComp1Name;
+
+        const classNames = preset.join(' ');
+        return (
+            <>
+                <Name style={{ fontSize: `${size}` }} className={classNames}>
+                    {children}
+                </Name>
+            </>
+        );
+    }
 }
 
-type BasicHtmlAttributes = Omit<React.DetailsHTMLAttributes<any>,keyof SubComp1Props>
+const TextSubComponent1Memoized = React.memo(TextSubComponent);
 
-export type SubComp1Props_HtmlAttributes = SubComp1Props
-& typeof SubComp1DefaultProps & BasicHtmlAttributes
-//
-// const TextSubComponent1 : React.FC<React.PropsWithChildren<SubComp1Props_HtmlAttributes>> = ({
-//
-//     children,
-//     TextSubComp1_Name,
-//     preset,
-//     size,
-//     className,
-//     ...props
-//
-// })=>{
-//
-//     const Name=TextSubComp1_Name
-//
-//     return (
-//         <>
-//         <TextSubComp1_Name className={className} {...props} >
-//             {children}
-//         </TextSubComp1_Name>
-//         </>
-//     )
-// }
-//
-//
-//
-//
+export default ComponentWithDefaults(TextSubComponent1Memoized, TextSubComp1DefaultProps);

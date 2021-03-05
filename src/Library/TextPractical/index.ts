@@ -1,1 +1,1 @@
-export {default as Practical_TextComponent} from './TextComp'
+export { default as PracticalTextComponent } from './TextComp';
